@@ -1,0 +1,80 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\include{funcoes}
+\begin{document}
+
+\chapter{Introdução}
+	\section{Visão Geral}
+		O sistema distribuído proposto tem o objetivo de paralelizar o uso de um WPA cracker, no caso \emph{aircrack}, para que possa-se alcançar um desempenho melhor na realização de quebra de chave WPA. Com um arquitetura cliente-servidor, 
+		temos um computador servidor que o papel de coordenar a distribuição de tarefas entre vários clientes. Os computadores clientes recebem as tarefas do servidor, executam e retornam um feedback sobre o andamento do processo ao servidor.
+		
+		\subsection{Atividades do Servidor}
+		\begin{itemize}
+			\item Inicializar, parar e informar andamento do processo 
+			\item Fazer leitura do pacote contendo handshake e transferir para os clientes 
+			\item Realizar a divisão do dicionário para os clientes 
+		\end{itemize}
+		
+		\subsection{Atividades do Cliente}
+		\begin{itemize}
+			\item Receber o pacote capturado contendo um handshake
+		\end{itemize}
+
+	\clearpage
+	\section{Protocolo}
+
+		\Protocolo{STATUS}
+		{Solicita a situação atual do processo de um cliente}
+		{
+			\ProtocoloResposta{NOT\_STARTED}{O processo não foi iniciado}
+			\ProtocoloResposta{PROCESSING}{O processo está em andamento}
+			\ProtocoloResposta{FAILED}{Informa que houve uma falha no processo}
+			\ProtocoloResposta{KEY\_FOUND}{Informa que o processo foi finalizado e a palavra chave foi encontrada com sucesso}
+			\ProtocoloResposta{KEY\_NOT\_FOUND}{Informa que o processo foi finalizado e a palavra chave não foi encontrada}
+		}
+
+		\Protocolo{CURRENT\_PASSPHRASE}
+		{Solicita a um cliente qual \emph{passphrase} está atualmente sendo testada}
+		{
+			\ProtocoloResposta{CURRENT\_PASSPHRASE <passphrase>}{Informa a \emph{passphrase} atual}
+		}
+
+		\Protocolo{CURRENT\_TIME}
+		{Solicita a um cliente o tempo decorrente do processo}
+		{
+			\ProtocoloResposta{CURRENT\_TIME <tempo>}{Informa o tempo decorrente do processo de um cliente}
+		}
+		
+		\Protocolo{CURRENT\_KEYS\_PER\_SECOND}
+		{Solicita a um cliente o número de chaves por segundo que está sendo tentado}
+		{
+			\ProtocoloResposta{CURRENT\_KEYS\_PER\_SECOND <keys>}{Informa o número de chaves por segundo}
+		}
+		
+		\Protocolo{KEY\_FOUND}
+		{Solicita a um cliente a chave encontrada}
+		{
+			\ProtocoloResposta{KEY\_FOUND <chave>}{Informa a chave encontrada}
+		}
+		
+		\Protocolo{STOP\_CRACK}
+		{Solicita a imediata interrupção do processo em um cliente}
+		{
+			\ProtocoloResposta{STOP\_OK}{Informa que o processo foi interrompido com sucesso}
+			\ProtocoloResposta{STOP\_FAILED}{Informa que não foi possível interromper o processo}
+		}
+		
+		\Protocolo{START\_CRACK <charset> <min> <max> <part> <cap>}
+		{Solicita a inicialização do processo em um cliente}
+		{
+			\ProtocoloResposta{START\_OK}{Informa que o processo foi iniciado}
+		}
+		
+
+		\section{Diagrama de Classes}
+		\section{Diagrama de Sequencia}
+		
+
+
+\end{document}
