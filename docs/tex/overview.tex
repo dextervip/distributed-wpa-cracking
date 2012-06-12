@@ -1,24 +1,37 @@
-\documentclass[12pt,a4paper]{report}
+\documentclass[12pt,a4paper]{abnt}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[english,brazilian]{babel}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{indentfirst}
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+\usepackage{placeins}
 \include{funcoes}
 \begin{document}
 
 \chapter{Introdução}
 	\section{Visão Geral}
-		O sistema distribuído proposto tem o objetivo de paralelizar o uso de um WPA cracker, no caso \emph{aircrack}, para que possa-se alcançar um desempenho melhor na realização de quebra de chave WPA. Com um arquitetura cliente-servidor, 
-		temos um computador servidor que o papel de coordenar a distribuição de tarefas entre vários clientes. Os computadores clientes recebem as tarefas do servidor, executam e retornam um feedback sobre o andamento do processo ao servidor.
+		O sistema distribuído proposto tem o objetivo de paralelizar o uso de um \emph{WPA cracker}, no caso \emph{aircrack}, para que possa-se alcançar um desempenho melhor na realização de quebra de uma chave WPA-PSK. Com uma arquitetura cliente-servidor, 
+		temos um computador servidor que tem o papel de coordenar a distribuição de tarefas entre vários clientes. Os computadores clientes recebem as tarefas do servidor, executam e retornam informações sobre o andamento quando solicitado pelo servidor.
 		
 		\subsection{Atividades do Servidor}
 		\begin{itemize}
-			\item Inicializar, parar e informar andamento do processo 
-			\item Fazer leitura do pacote contendo handshake e transferir para os clientes 
-			\item Realizar a divisão do dicionário para os clientes 
+			\item Fazer leitura do arquivo contendo um \emph{handshake} e transferir para os clientes 
+			\item Realizar a divisão do dicionário de palavras para os clientes disponíveis
+			\item Inicializar o processo de \emph{cracking}
+			\item Monitorar o andamento de todos os clientes
 		\end{itemize}
 		
 		\subsection{Atividades do Cliente}
 		\begin{itemize}
-			\item Receber o pacote capturado contendo um handshake
+			\item Receber o pacote capturado contendo um \emph{handshake}
+			\item Gerar seu próprio dicionário de palavras baseado nas informações fornecidas pelo servidor
+			\item Executar o \emph{cracker} e obter informações sobre o processo
 		\end{itemize}
 
 	\clearpage
@@ -70,9 +83,39 @@
 		{
 			\ProtocoloResposta{START\_OK}{Informa que o processo foi iniciado}
 		}
-		
+		\clearpage
+		\section{Diagrama de Caso de Uso}
 
+		\begin{figure}[htp]
+			\begin{center}
+			  \includegraphics[width=350px]{casoDeUso}
+			  \caption[Diagrama de Caso de Uso]{Diagrama de Caso de Uso}
+			  \label{fig:casoDeUso}
+			\end{center}
+		\end{figure}
+		\FloatBarrier
+
+		\clearpage
 		\section{Diagrama de Classes}
+
+			\begin{figure}[htp]
+				\begin{center}
+				  \includegraphics[width=350px]{diagramaClassesServidor}
+				  \caption[Diagrama de Classes Servidor]{Diagrama de Classes Servidor}
+				  \label{fig:diagramaClassesServidor}
+				\end{center}
+			\end{figure}
+			\FloatBarrier
+
+			\begin{figure}[htp]
+				\begin{center}
+				  \includegraphics[width=350px]{DiagramaClassesCliente}
+				  \caption[Diagrama de Classes Cliente]{Diagrama de Classes Cliente}
+				  \label{fig:diagramaClassesCliente}
+				\end{center}
+			\end{figure}
+			\FloatBarrier
+
 		\section{Diagrama de Sequencia}
 		
 
