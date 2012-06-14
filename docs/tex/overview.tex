@@ -14,6 +14,10 @@
 \include{funcoes}
 \begin{document}
 
+\tableofcontents
+\listoffigures
+\clearpage
+
 \chapter{Introdução}
 	\section{Visão Geral}
 		O sistema distribuído proposto tem o objetivo de paralelizar o uso de um \emph{WPA cracker}, no caso \emph{aircrack}, para que possa-se alcançar um desempenho melhor na realização de quebra de uma chave WPA-PSK. Com uma arquitetura cliente-servidor, 
@@ -35,14 +39,16 @@
 		\end{itemize}
 
 	\clearpage
+\chapter{Projeto}
 	\section{Protocolo}
 
 		\Protocolo{STATUS}
 		{Solicita a situação atual do processo de um cliente}
 		{
-			\ProtocoloResposta{NOT\_STARTED}{O processo não foi iniciado}
+			\ProtocoloResposta{INIT}{O processo aguarda um arquivo contendo o \emph{handshake}}
+			\ProtocoloResposta{WAITING}{O processo aguarda ser iniciado}
 			\ProtocoloResposta{PROCESSING}{O processo está em andamento}
-			\ProtocoloResposta{FAILED}{Informa que houve uma falha no processo}
+			\ProtocoloResposta{ERROR <message>}{Informa que houve uma falha no processo}
 			\ProtocoloResposta{KEY\_FOUND}{Informa que o processo foi finalizado e a palavra chave foi encontrada com sucesso}
 			\ProtocoloResposta{KEY\_NOT\_FOUND}{Informa que o processo foi finalizado e a palavra chave não foi encontrada}
 		}
@@ -65,31 +71,47 @@
 			\ProtocoloResposta{CURRENT\_KEYS\_PER\_SECOND <keys>}{Informa o número de chaves por segundo}
 		}
 		
-		\Protocolo{KEY\_FOUND}
+		\Protocolo{GET\_KEY\_FOUND}
 		{Solicita a um cliente a chave encontrada}
 		{
-			\ProtocoloResposta{KEY\_FOUND <chave>}{Informa a chave encontrada}
+			\ProtocoloResposta{KEY <chave>}{Informa a chave encontrada}
 		}
 		
 		\Protocolo{STOP\_CRACK}
 		{Solicita a imediata interrupção do processo em um cliente}
 		{
 			\ProtocoloResposta{STOP\_OK}{Informa que o processo foi interrompido com sucesso}
-			\ProtocoloResposta{STOP\_FAILED}{Informa que não foi possível interromper o processo}
+			\ProtocoloResposta{STOP\_ERROR}{Informa que não foi possível interromper o processo}
 		}
 		
-		\Protocolo{START\_CRACK <charset> <min> <max> <part> <cap>}
+		\Protocolo{START\_CRACK <charset> <min> <max> <part> <totalClients>}
 		{Solicita a inicialização do processo em um cliente}
 		{
 			\ProtocoloResposta{START\_OK}{Informa que o processo foi iniciado}
+			\ProtocoloResposta{CAP\_NOT\_FOUND}{Informa que o processo não pode ser iniciado, por não existir um arquivo cap contendo uma \emph{handshake}}
 		}
+
+		\Protocolo{CAP}
+		{Solicita o recebimento de um arquivo contendo uma \emph{handskake}. Após a solicitação deve ser feito o envio do arquivo.}
+		{
+			\ProtocoloResposta{CAP\_OK}{Informa que o arquivo cap foi recebido com sucesso}
+			\ProtocoloResposta{CAP\_INVALID}{Informa que o arquivo cap é inválido}
+		}
+
+		\Protocolo{STATS}
+		{Solicita estatísticas do andamento do processo em um cliente}
+		{
+			\ProtocoloResposta{STATS <tempo> <keysPerSecond> <currentPassphrase>}{Informa as estatísticas do andamento no cliente}
+			\ProtocoloResposta{STATS\_NO\_ACTIVE\_PROCESS}{Informa que não existe processo em andamento no cliente}
+		}
+
 		\clearpage
 		\section{Diagrama de Caso de Uso}
 
 		\begin{figure}[htp]
 			\begin{center}
 			  \includegraphics[width=350px]{casoDeUso}
-			  \caption[Diagrama de Caso de Uso]{Diagrama de Caso de Uso}
+			  \caption{Diagrama de Caso de Uso}
 			  \label{fig:casoDeUso}
 			\end{center}
 		\end{figure}
@@ -101,22 +123,52 @@
 			\begin{figure}[htp]
 				\begin{center}
 				  \includegraphics[width=350px]{diagramaClassesServidor}
-				  \caption[Diagrama de Classes Servidor]{Diagrama de Classes Servidor}
+				  \caption{Diagrama de Classes Servidor}
 				  \label{fig:diagramaClassesServidor}
 				\end{center}
 			\end{figure}
-			\FloatBarrier
 
 			\begin{figure}[htp]
 				\begin{center}
 				  \includegraphics[width=350px]{DiagramaClassesCliente}
-				  \caption[Diagrama de Classes Cliente]{Diagrama de Classes Cliente}
+				  \caption{Diagrama de Classes Cliente}
 				  \label{fig:diagramaClassesCliente}
 				\end{center}
 			\end{figure}
 			\FloatBarrier
 
+		\clearpage
 		\section{Diagrama de Sequencia}
+			\begin{figure}[htp]
+				\begin{center}
+				  \includegraphics[width=450px]{diagramaSequenciaServidor}
+				  \caption{Diagrama de Sequencia Servidor}
+				  \label{fig:diagramaSequenciaServidor}
+				\end{center}
+			\end{figure}
+			
+			\begin{figure}[htp]
+				\begin{center}
+				  \includegraphics[width=450px]{diagramaSequenciaCliente}
+				  \caption{Diagrama de Sequencia Cliente}
+				  \label{fig:diagramaSequenciaCliente}
+				\end{center}
+			\end{figure}
+			\FloatBarrier
+
+			
+		
+		\clearpage
+		\section{Protótipo de Interface}
+		
+			\begin{figure}[htp]
+				\begin{center}
+				  \includegraphics[width=450px]{mockup}
+				  \caption{Protótipo de Interface}
+				  \label{fig:prototipoInterface}
+				\end{center}
+			\end{figure}
+			\FloatBarrier
 		
 
 
