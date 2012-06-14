@@ -6,3 +6,6 @@
 *.log
 *.pdf
 *.gz
+*.out
+*.lof
+*.toc
