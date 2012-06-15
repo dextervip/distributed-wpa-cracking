@@ -85,7 +85,7 @@
 		}
 		
 		\Protocolo{START\_CRACK <charset> <min> <max> <part> <totalClients>}
-		{Solicita a inicialização do processo em um cliente}
+		{Solicita a inicialização do processo em um cliente, onde \emph{charset} é o conjunto de caracteres utilizados para geração do dicionario, \emph{min} é o tamanho mínimo e \emph{max} tamanho máximo para geração das palavras no dicionário, \emph{part} e \emph{totalClients} dizem a parte que cliente necessita gerar e o número total de clientes}
 		{
 			\ProtocoloResposta{START\_OK}{Informa que o processo foi iniciado}
 			\ProtocoloResposta{CAP\_NOT\_FOUND}{Informa que o processo não pode ser iniciado, por não existir um arquivo cap contendo uma \emph{handshake}}
