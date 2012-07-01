@@ -15,9 +15,9 @@ import static org.junit.Assert.*;
  *
  * @author Rafael
  */
-public class AircrackTest {
+public class AirCrackTest {
 
-    public AircrackTest() {
+    public AirCrackTest() {
     }
 
     @BeforeClass
@@ -44,10 +44,11 @@ public class AircrackTest {
         try {
             Aircrack c = new Aircrack();
             c.setCapPath("Private-02.cap");
-            c.setCombinationListPath("wordlist_pt_br_final.txt");
+            c.setCombinationPath("wordlist_pt_br_final.txt");
             c.startCrack();
-            c.processInputSream();
-
+            String status = c.getStatus();
+            assertEquals(status, "ERROR");
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

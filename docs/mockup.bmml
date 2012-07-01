@@ -5,9 +5,9 @@
         <text>Distributed%20WPA%20Cracker</text>
       </controlProperties>
     </control>
-    <control controlID="1" controlTypeID="com.balsamiq.mockups::DataGrid" x="392" y="360" w="754" h="239" measuredW="419" measuredH="159" zOrder="1" locked="false" isInGroup="-1">
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::DataGrid" x="392" y="360" w="754" h="239" measuredW="415" measuredH="145" zOrder="1" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Nome%20do%5CrCliente%20%5Ev%2C%20Status%20%5Ev%2C%20Chaves/s%20%5Ev%2C%20Chave%20atual%20%5Ev%2C%20tempo%20%5Ev%0APC1%20%2C%20Processando%2C%205000%2C%201452a89%2C%2001%3A11%3A00%0APC2%20%2C%20Processando%2C%205000%2C%208452a78%2C%2001%3A11%3A00%0APC3%20%2C%20Processando%2C%205000%2C%206542a45%2C%2001%3A11%3A00%0APC4%2C%20Processando%2C%205000%2C%202587a12%2C%2001%3A11%3A00</text>
+        <text>Client%20%5Ev%2C%20Status%20%5Ev%2C%20Keys/s%20%5Ev%2C%20Current%20Key%20%5Ev%2C%20Elapsed%20Time%20%5Ev%0APC1%20%2C%20Processing%2C%205000%2C%201452a89%2C%2001%3A11%3A00%0APC2%20%2C%20Processing%2C%205000%2C%208452a78%2C%2001%3A11%3A00%0APC3%20%2C%20Processing%2C%205000%2C%206542a45%2C%2001%3A11%3A00%0APC4%2C%20Processing%2C%205000%2C%202587a12%2C%2001%3A11%3A00</text>
       </controlProperties>
     </control>
     <control controlID="2" controlTypeID="com.balsamiq.mockups::ComboBox" x="1059" y="105" w="87" h="-1" measuredW="60" measuredH="23" zOrder="2" locked="false" isInGroup="-1">
@@ -15,39 +15,39 @@
         <text>1%20min</text>
       </controlProperties>
     </control>
-    <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="858" y="107" w="205" h="32" measuredW="143" measuredH="21" zOrder="3" locked="false" isInGroup="-1">
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="931" y="105" w="121" h="32" measuredW="116" measuredH="21" zOrder="3" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Frequ%EAncia%20Atualiza%E7%E3o%3A</text>
+        <text>Update%20Frequency%3A</text>
       </controlProperties>
     </control>
-    <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="392" y="316" w="173" h="32" measuredW="120" measuredH="21" zOrder="4" locked="false" isInGroup="-1">
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="392" y="294" w="130" h="32" measuredW="124" measuredH="21" zOrder="4" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Total%20de%20Clientes%3A%204</text>
+        <text>Number%20of%20Clients%3A%204</text>
       </controlProperties>
     </control>
-    <control controlID="7" controlTypeID="com.balsamiq.mockups::Button" x="389" y="115" w="82" h="41" measuredW="57" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
+    <control controlID="7" controlTypeID="com.balsamiq.mockups::Button" x="392" y="172" w="82" h="41" measuredW="53" measuredH="27" zOrder="5" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Iniciar</text>
+        <text>Start</text>
       </controlProperties>
     </control>
-    <control controlID="8" controlTypeID="com.balsamiq.mockups::Button" x="390" y="172" w="81" h="41" measuredW="56" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Button" x="484" y="172" w="81" h="41" measuredW="51" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Parar</text>
+        <text>Stop</text>
       </controlProperties>
     </control>
-    <control controlID="9" controlTypeID="com.balsamiq.mockups::Button" x="501" y="117" w="146" h="41" measuredW="101" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
+    <control controlID="9" controlTypeID="com.balsamiq.mockups::Button" x="405" y="115" w="146" h="41" measuredW="77" measuredH="27" zOrder="7" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Carregar%20cap</text>
+        <text>Load%20cap</text>
       </controlProperties>
     </control>
-    <control controlID="11" controlTypeID="com.balsamiq.mockups::Label" x="392" y="231" w="230" h="32" measuredW="159" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::Label" x="392" y="231" w="230" h="32" measuredW="112" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Status%20Geral%3A%20Processando</text>
+        <text>Status%3A%20Processing</text>
       </controlProperties>
     </control>
-    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="392" y="262" w="156" h="32" measuredW="108" measuredH="21" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Label" x="392" y="262" w="156" h="32" measuredW="93" measuredH="21" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Chaves/s%3A%2045000</text>
+        <text>Keys/s%3A%2045000</text>
       </controlProperties>
     </control>
     <control controlID="18" controlTypeID="__group__" x="946" y="156" w="200" h="170" measuredW="200" measuredH="170" zOrder="10" locked="false" isInGroup="-1">
@@ -57,17 +57,17 @@
       <groupChildrenDescriptors>
         <control controlID="0" controlTypeID="com.balsamiq.mockups::FieldSet" x="0" y="0" w="-1" h="-1" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="18">
           <controlProperties>
-            <text>Andamento</text>
+            <text>Progress</text>
           </controlProperties>
         </control>
-        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="16" y="45" w="169" h="32" measuredW="158" measuredH="21" zOrder="1" locked="false" isInGroup="18">
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="16" y="45" w="169" h="32" measuredW="138" measuredH="21" zOrder="1" locked="false" isInGroup="18">
           <controlProperties>
-            <text>Tempo%20estimado%3A%205%3A00%3A00</text>
+            <text>Estimed%20Time%3A%205%3A00%3A00</text>
           </controlProperties>
         </control>
-        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="16" y="127" w="178" h="32" measuredW="123" measuredH="21" zOrder="2" locked="false" isInGroup="18">
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="16" y="127" w="178" h="32" measuredW="102" measuredH="21" zOrder="2" locked="false" isInGroup="18">
           <controlProperties>
-            <text>Chave%3A%20Procurando...</text>
+            <text>Key%3A%20Searching...</text>
           </controlProperties>
         </control>
         <control controlID="3" controlTypeID="__group__" x="28" y="81" w="144" h="30" measuredW="144" measuredH="30" zOrder="3" locked="false" isInGroup="18">
@@ -88,9 +88,51 @@
             </control>
           </groupChildrenDescriptors>
         </control>
-        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="16" y="21" w="-1" h="-1" measuredW="163" measuredH="21" zOrder="4" locked="false" isInGroup="18">
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="16" y="21" w="-1" h="-1" measuredW="138" measuredH="21" zOrder="4" locked="false" isInGroup="18">
           <controlProperties>
-            <text>Tempo%20decorrido%3A%2001%3A11%3A00</text>
+            <text>Elapsed%20time%3A%2001%3A11%3A00</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="27" controlTypeID="__group__" x="693" y="156" w="200" h="170" measuredW="200" measuredH="170" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <controlName>doctionary</controlName>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::FieldSet" x="0" y="0" w="-1" h="-1" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="27">
+          <controlProperties>
+            <text>Dictionary</text>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::TextInput" x="92" y="37" w="93" h="-1" measuredW="57" measuredH="27" zOrder="1" locked="false" isInGroup="27">
+          <controlProperties>
+            <text>123abc</text>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::TextInput" x="94" y="72" w="91" h="-1" measuredW="23" measuredH="27" zOrder="2" locked="false" isInGroup="27">
+          <controlProperties>
+            <text>4</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::TextInput" x="92" y="109" w="93" h="-1" measuredW="22" measuredH="27" zOrder="3" locked="false" isInGroup="27">
+          <controlProperties>
+            <text>6</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="13" y="37" w="-1" h="-1" measuredW="52" measuredH="21" zOrder="4" locked="false" isInGroup="27">
+          <controlProperties>
+            <text>Charset</text>
+          </controlProperties>
+        </control>
+        <control controlID="5" controlTypeID="com.balsamiq.mockups::Label" x="11" y="75" w="-1" h="-1" measuredW="62" measuredH="21" zOrder="5" locked="false" isInGroup="27">
+          <controlProperties>
+            <text>Min%20length</text>
+          </controlProperties>
+        </control>
+        <control controlID="6" controlTypeID="com.balsamiq.mockups::Label" x="15" y="113" w="-1" h="-1" measuredW="67" measuredH="21" zOrder="6" locked="false" isInGroup="27">
+          <controlProperties>
+            <text>Max%20length</text>
           </controlProperties>
         </control>
       </groupChildrenDescriptors>

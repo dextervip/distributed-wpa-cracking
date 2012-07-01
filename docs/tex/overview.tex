@@ -13,6 +13,11 @@
 \usepackage{placeins}
 \include{funcoes}
 \begin{document}
+\author{Rafael}
+\date{\today}
+\title{Distributed WPA Cracker}
+\maketitle
+
 
 \tableofcontents
 \listoffigures
@@ -85,14 +90,22 @@
 		}
 		
 		\Protocolo{START\_CRACK <charset> <min> <max> <part> <totalClients>}
-		{Solicita a inicialização do processo em um cliente, onde \emph{charset} é o conjunto de caracteres utilizados para geração do dicionario, \emph{min} é o tamanho mínimo e \emph{max} tamanho máximo para geração das palavras no dicionário, \emph{part} e \emph{totalClients} dizem a parte que cliente necessita gerar e o número total de clientes}
+		{Solicita a inicialização do processo em um cliente, onde:
+		\emph{charset} é o conjunto de caracteres utilizados para geração das
+		palavras que compõem o dicionario;
+		\emph{min} é o numero mínimo de caracteres de uma palavra do dicionario;
+		\emph{max} é o numero máximo de caracteres de uma palavra do dicionario;
+		\emph{totalClients} indica em quantas partes o dicionario é dividido;
+		\emph{part} é o indice da parte do dicionario que deve ser usada pelo cliente
+		na execução do algoritmo;
+		}
 		{
 			\ProtocoloResposta{START\_OK}{Informa que o processo foi iniciado}
 			\ProtocoloResposta{CAP\_NOT\_FOUND}{Informa que o processo não pode ser iniciado, por não existir um arquivo cap contendo uma \emph{handshake}}
 		}
 
-		\Protocolo{CAP}
-		{Solicita o recebimento de um arquivo contendo uma \emph{handskake}. Após a solicitação deve ser feito o envio do arquivo.}
+		\Protocolo{CAP <arquivo>}
+		{Realiza o envio do arquivo contendo uma \emph{handskake} para um cliente.}
 		{
 			\ProtocoloResposta{CAP\_OK}{Informa que o arquivo cap foi recebido com sucesso}
 			\ProtocoloResposta{CAP\_INVALID}{Informa que o arquivo cap é inválido}
@@ -169,7 +182,15 @@
 				\end{center}
 			\end{figure}
 			\FloatBarrier
-		
 
+\chapter{Planejamento Futuro}
+	\section{Recursos}
+		\begin{itemize}
+			\item Pré-calculo chaves para otimização de desempenho
+			\item Utilização do aircrack, cowpatty e piryt
+			\item Recurso para uso da CPU e GPU simultaneamente
+			\item Recurso para limite de uso de CPU \% ou cores
+			\item Recurso para aquisição de informações de hardware (Pode ser inviável rodar um dicionario muito grande em 1 CPU de baixo desempenho Ex.: intel atom) ou analise da velocidades de chaves por segundo.
+		\end{itemize}
 
 \end{document}
