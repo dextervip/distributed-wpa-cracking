@@ -4,6 +4,7 @@
  */
 package cliente;
 
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +24,7 @@ public class Init {
                 c.process(msg);
             }
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, "Erro desconhecido", ex);
         }
     }
     private static final Logger LOG = Logger.getLogger(Init.class.getName());

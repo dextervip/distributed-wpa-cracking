@@ -4,11 +4,11 @@ public abstract class WPACracker {
 
     protected String capPath;
     protected String combinationPath;
-    protected String status;
-    protected String currentPassphrase;
-    protected String currentTime;
-    protected String currentKeysPerSecond;
-    protected String keyFound;
+    protected String status = "N/A";
+    protected String currentPassphrase = "N/A";
+    protected String currentTime = "N/A";
+    protected String currentKeysPerSecond = "N/A";
+    protected String keyFound = "N/A";
 
     public String getCapPath() {
         return capPath;

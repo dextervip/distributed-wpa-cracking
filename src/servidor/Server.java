@@ -92,6 +92,11 @@ public class Server extends Thread {
         this.updateFrequency = updateFrequency;
     }
 
+    public int getUpdateFrequency() {
+        return updateFrequency;
+    }
+    
+    
     @Override
     public void run() {
         try {

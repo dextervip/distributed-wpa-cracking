@@ -30,44 +30,60 @@ public class Client {
     public void connect() {
         try {
             socket = new Socket(serverAddress, port);
-            LOG.log(Level.INFO, "Conectado ao servidor");
+            LOG.log(Level.INFO, "Connected to server");
             this.outputStream = new DataOutputStream(this.socket.getOutputStream());
             this.inputStream = new DataInputStream(this.socket.getInputStream());
         } catch (ConnectException ex) {
             //Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-            LOG.log(Level.WARNING, "Conexão recusada, tentando reconectar em 3 segundos...");
+            LOG.log(Level.WARNING, "Connection refused, retrying to connect in 3 seconds...");
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException ex1) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex1);
             }
             this.connect();
-        } catch (SocketException ex){
-            LOG.log(Level.WARNING, "Problemas de conexão, tentando reconectar em 3 segundos...");
+        } catch (SocketException ex) {
+            LOG.log(Level.WARNING, "Connection Error, retrying to connect in 3 seconds...");
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException ex1) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex1);
             }
             this.connect();
-        } 
-        catch (UnknownHostException ex) {
+        } catch (UnknownHostException ex) {
             //LOG.log(Level.SEVERE, null, ex);
-            LOG.log(Level.WARNING, "Host desconhecido");
+            LOG.log(Level.WARNING, "Unknown Host");
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
-    public void send(String msg) throws IOException {
-        this.outputStream.writeUTF(msg);
-        this.outputStream.flush();
+    public void send(String msg) {
+        try {
+            this.outputStream.writeUTF(msg);
+            this.outputStream.flush();
+        } catch (SocketException e) {
+            //falha na conexao
+            LOG.log(Level.WARNING, "Connection Error");
+            this.connect();
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Unknown Error", e);
+        }
+
     }
 
-    public String receive() throws IOException {
-        String msg = inputStream.readUTF();
-        return msg;
+    public String receive() {
+        try {
+            String msg = inputStream.readUTF();
+            return msg;
+        } catch (SocketException e) {
+            LOG.log(Level.WARNING, "Connection Error");
+            this.connect();
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, "Unknown Error", e);
+        }
+        return null;
     }
 
     public void setCracker(WPACracker cracker) {
@@ -83,7 +99,14 @@ public class Client {
         String regex = "(?i)\\QSTATUS\\E";
         Matcher m = Pattern.compile(regex).matcher(msg);
         if (m.find()) {
-            this.send(this.cracker.getStatus());
+            this.send("STATUS "+this.cracker.getStatus());
+        }
+        
+        regex = "(?i)\\QSTATS\\E";
+        m = Pattern.compile(regex).matcher(msg);
+        if (m.find()) {
+            this.send("STATS "+this.cracker.getCurrentTime()+" "+this.cracker.getCurrentKeysPerSecond()+
+                    " "+this.cracker.getCurrentPassphrase());
         }
 
     }

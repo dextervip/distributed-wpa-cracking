@@ -7,7 +7,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -196,13 +198,10 @@ public class GUIMode extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Client Name", "Status", "Keys/s", "Current Key", "Elapsed Time"
+                "Host", "Status", "Keys/s", "Current Key", "Elapsed Time"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -540,24 +539,33 @@ public class GUIMode extends javax.swing.JFrame {
         public void run() {
             while (true) {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(server.getUpdateFrequency() * 1000);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(GUIMode.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                DefaultTableModel model = new DefaultTableModel();
-                jTable1.setModel(model);
-                model.addColumn("Host");
-                model.addColumn("Status");
-                model.addColumn("Keys/s");
-                model.addColumn("Current Passphrse");
-                model.addColumn("Elapsed Time");
-                ArrayList<Node> node = server.getNodes();
-                ListIterator<Node> nodeList = node.listIterator();
-                while (nodeList.hasNext()) {
-                    Node n = nodeList.next();
-                    model.addRow(new Object[]{n.getIp(), n.getStatus(), n.getCurrentKeysPerSecond(), n.getCurrentPassphrase(), n.getCurrentTime()});
-                    //model.addRow(new Object[]{"OI","OI","OI","OI","OI"});
-                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        int selectedRow = jTable1.getSelectedRow();
+                        //DefaultTableModel model = new DefaultTableModel();
+                        //jTable1.setModel(model);
+                        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                        //model.addColumn("Host");
+                        //model.addColumn("Status");
+                        //model.addColumn("Keys/s");
+                        //model.addColumn("Current Passphrse");
+                        //model.addColumn("Elapsed Time");
+                        ArrayList<Node> node = server.getNodes();
+                        ListIterator<Node> nodeList = node.listIterator();
+                        while (nodeList.hasNext()) {
+                            Node n = nodeList.next();
+                            model.addRow(new Object[]{n.getIp(), n.getStatus(), n.getCurrentKeysPerSecond(), n.getCurrentPassphrase(), n.getCurrentTime()});
+                        }
+                        if(selectedRow > 0) {
+                            jTable1.setRowSelectionInterval(selectedRow, selectedRow);
+                        }
+
+                    }
+                });
             }
         }
     }
