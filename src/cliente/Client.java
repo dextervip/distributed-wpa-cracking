@@ -2,6 +2,7 @@ package cliente;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
@@ -99,15 +100,42 @@ public class Client {
         String regex = "(?i)\\QSTATUS\\E";
         Matcher m = Pattern.compile(regex).matcher(msg);
         if (m.find()) {
-            this.send("STATUS "+this.cracker.getStatus());
+            this.send("STATUS " + this.cracker.getStatus());
         }
-        
+
         regex = "(?i)\\QSTATS\\E";
         m = Pattern.compile(regex).matcher(msg);
         if (m.find()) {
-            this.send("STATS "+this.cracker.getCurrentTime()+" "+this.cracker.getCurrentKeysPerSecond()+
-                    " "+this.cracker.getCurrentPassphrase());
+            this.send("STATS " + this.cracker.getCurrentTime() + " " + this.cracker.getCurrentKeysPerSecond()
+                    + " " + this.cracker.getCurrentPassphrase());
+        }
+        regex = "(?i)\\QCAP\\E";
+        m = Pattern.compile(regex).matcher(msg);
+        if (m.find()) {
+            //receber arquivo
+            this.receiveCapFile();
         }
 
+    }
+
+    private void receiveCapFile() throws IOException {
+        try {
+            //recebendo arquivo pelo stream
+            int dataLength = this.inputStream.readInt();
+            byte[] receivedData = new byte[dataLength];
+
+            for (int i = 0; i < receivedData.length; i++) {
+                receivedData[i] = this.inputStream.readByte();
+            }
+            //gravando arquivo recebido pelo strem
+            FileOutputStream fos = new FileOutputStream("received.cap");
+            fos.write(receivedData);
+            fos.close();
+            //mandando reposta de recebido
+            this.send("CAP_OK");
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, "Error while transfering file", ex);
+            this.send("CAP_TRANSFERENCE_ERROR "+ex.getMessage());
+        }
     }
 }

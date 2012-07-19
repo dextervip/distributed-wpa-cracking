@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import servidor.Server;
 import cliente.Client;
-import java.io.IOException;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidor.Node;
@@ -37,27 +37,49 @@ public class IntegrationTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of setCapPath method, of class Aircrack.
-     */
     @Test
     public void testInitialState() {
-        this.initServer();
-        this.s.configureDictionary("abc", 4, 5);
-        this.initClient();
         try {
+            this.initServer();
+            this.initClient();
+            this.s.configureDictionary("abc", 4, 5);
+            //Espera para o cliente se conectar ao servidor
             Thread.sleep(2000);
-            if (s.getNumberOfNodes() > 0) {
-                Node n = s.getNodes().get(0);
-                n.updateStatistics();
-                Thread.sleep(4000);
-                assertEquals(n.getStatus(), "INIT");
-                assertEquals(n.getCurrentKeysPerSecond(), "N/A");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            Node n = s.getNodes().get(0);
+            n.updateStatistics();
+            //Esperar atualização de estatisticas
+            Thread.sleep(2000);
+            assertEquals(n.getStatus(), "INIT");
+            assertEquals(n.getCurrentKeysPerSecond(), "N/A");
+            assertEquals(n.getCurrentPassphrase(), "N/A");
+            assertEquals(n.getCurrentTime(), "N/A");
+        } catch (Exception ex) {
+            Logger.getLogger(IntegrationTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail(ex.getMessage());
         }
 
+        try {
+            this.s.loadCap(".\\test\\Private-01.cap");
+            this.s.startCrack();
+            Thread.sleep(3000);
+            Node n = s.getNodes().get(0);
+            assertEquals("WAITING", n.getStatus());
+
+            //deleta o arquivo cap recebido
+            File f = new File("received.cap");
+            if (f.exists()) {
+                Logger.getLogger(IntegrationTest.class.getName()).log(Level.INFO, "Detelting {0}", f.getAbsolutePath());
+                f.deleteOnExit();
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(IntegrationTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail(ex.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testSendCapFile() {
     }
 
     public void initServer() {
@@ -67,8 +89,8 @@ public class IntegrationTest {
                     public void run() {
                         try {
                             s.listen();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } catch (Exception ex) {
+                            Logger.getLogger(IntegrationTest.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }).start();
@@ -84,8 +106,8 @@ public class IntegrationTest {
                             try {
                                 c.process(c.receive());
                                 Thread.sleep(1000);
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            } catch (Exception ex) {
+                                Logger.getLogger(IntegrationTest.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
 

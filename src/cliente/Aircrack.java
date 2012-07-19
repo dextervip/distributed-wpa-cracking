@@ -21,10 +21,8 @@ public class Aircrack extends WPACracker implements Runnable {
     private Matcher m;
     private InputStream is;
     private Thread thread;
-    
-    
     private static final Logger LOG = Logger.getLogger(Aircrack.class.getName());
-    
+
     public Aircrack() {
         super();
         this.thread = new Thread(this);
@@ -36,52 +34,53 @@ public class Aircrack extends WPACracker implements Runnable {
         BufferedReader br = new BufferedReader(isr);
         String line;
         while ((line = br.readLine()) != null) {
-            //System.out.println(line);
             LOG.log(Level.INFO, line);
+            this.processMessage(line);
+        }
+    }
 
-            String regex = "(?i)\\QReading packets, please wait...\\E";
-            Matcher m = Pattern.compile(regex).matcher(line);
-            if (m.find()) {
-                this.status = "PROCESSING";
-            }
+    private void processMessage(String line) {
+        String regex = "(?i)\\QReading packets, please wait...\\E";
+        Matcher m = Pattern.compile(regex).matcher(line);
+        if (m.find()) {
+            this.status = "PROCESSING";
+        }
 
-            regex = "(?i)keys tested\\s\\Q(\\E(?<keys>[\\w\\s\\Q/.\\E]+)\\Q)\\E";
-            m = Pattern.compile(regex).matcher(line);
-            if (m.find()) {
-                this.currentKeysPerSecond = m.group("keys");
-            }
+        regex = "(?i)keys tested\\s\\Q(\\E(?<keys>[\\w\\s\\Q/.\\E]+)\\Q)\\E";
+        m = Pattern.compile(regex).matcher(line);
+        if (m.find()) {
+            this.currentKeysPerSecond = m.group("keys");
+        }
 
-            regex = "(?i)\\Q[\\E\\d{2}:\\d{2}:\\d{2}\\Q]\\E";
-            m = Pattern.compile(regex).matcher(line);
-            if (m.find()) {
-                this.currentTime = m.group();
-            }
+        regex = "(?i)\\Q[\\E\\d{2}:\\d{2}:\\d{2}\\Q]\\E";
+        m = Pattern.compile(regex).matcher(line);
+        if (m.find()) {
+            this.currentTime = m.group();
+        }
 
-            regex = "(?i)Current\\spassphrase:\\s(?<passphrase>[\\w]+)";
-            m = Pattern.compile(regex).matcher(line);
-            if (m.find()) {
-                this.currentPassphrase = m.group("passphrase");
-            }
+        regex = "(?i)Current\\spassphrase:\\s(?<passphrase>[\\w]+)";
+        m = Pattern.compile(regex).matcher(line);
+        if (m.find()) {
+            this.currentPassphrase = m.group("passphrase");
+        }
 
-            regex = "(?i)KEY FOUND!\\s\\Q[\\E\\s([\\w]+)\\s\\Q]\\E";
-            m = Pattern.compile(regex).matcher(line);
-            if (m.find()) {
-                this.keyFound = m.group();
-                this.status = "KEY_FOUND";
-            }
+        regex = "(?i)KEY FOUND!\\s\\Q[\\E\\s([\\w]+)\\s\\Q]\\E";
+        m = Pattern.compile(regex).matcher(line);
+        if (m.find()) {
+            this.keyFound = m.group();
+            this.status = "KEY_FOUND";
+        }
 
-            regex = "(?i)\\bPassphrase not in dictionary\\b";
-            m = Pattern.compile(regex).matcher(line);
-            if (m.find()) {
-                this.status = "KEY_NOT_FOUND";
-            }
-            
-            regex = "(?i)\\bNo networks found\\Q,\\E exiting\\b";
-            m = Pattern.compile(regex).matcher(line);
-            if (m.find()) {
-                this.status = "ERROR";
-            }
+        regex = "(?i)\\bPassphrase not in dictionary\\b";
+        m = Pattern.compile(regex).matcher(line);
+        if (m.find()) {
+            this.status = "KEY_NOT_FOUND";
+        }
 
+        regex = "(?i)\\bNo networks found\\Q,\\E exiting\\b";
+        m = Pattern.compile(regex).matcher(line);
+        if (m.find()) {
+            this.status = "ERROR";
         }
     }
 
@@ -105,9 +104,7 @@ public class Aircrack extends WPACracker implements Runnable {
         try {
             this.processInputSream();
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, e.getMessage());        
+            LOG.log(Level.SEVERE, e.getMessage());
         }
     }
-    
-    
 }

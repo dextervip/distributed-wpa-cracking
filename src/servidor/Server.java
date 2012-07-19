@@ -76,6 +76,15 @@ public class Server extends Thread {
             LOG.log(Level.WARNING, "No dictionary configured");
             throw new Exception("No dictionary configured");
         }
+        
+        ListIterator<Node> list = this.getNodes().listIterator();
+        int totalClients = this.getNumberOfNodes();
+        int count = 0;
+        while(list.hasNext()){
+            count++;
+            Node node =  list.next();
+            node.startCrack(this.charset, this.min, this.max, count, totalClients, this.capPath);
+        }
 
     }
 
