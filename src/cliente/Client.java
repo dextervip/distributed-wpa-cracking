@@ -19,13 +19,16 @@ public class Client {
     private int port = 8080;
     private String serverAddress = "localhost";
     private WPACracker cracker;
+    private CombinationGenerator cg;
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
     private Matcher m;
+    
     private static final Logger LOG = Logger.getLogger(Client.class.getName());
 
     public Client() {
         this.cracker = new Aircrack();
+        this.cg = new CombinationGenerator();
     }
 
     public void connect() {
@@ -95,12 +98,13 @@ public class Client {
         return this.cracker;
     }
 
-    public void process(String msg) throws IOException {
+    public void process(String msg) throws Exception {
         LOG.log(Level.INFO, "Mensagem recebida: {0}", msg);
         String regex = "(?i)\\QSTATUS\\E";
         Matcher m = Pattern.compile(regex).matcher(msg);
         if (m.find()) {
             this.send("STATUS " + this.cracker.getStatus());
+            return;
         }
 
         regex = "(?i)\\QSTATS\\E";
@@ -108,14 +112,33 @@ public class Client {
         if (m.find()) {
             this.send("STATS " + this.cracker.getCurrentTime() + " " + this.cracker.getCurrentKeysPerSecond()
                     + " " + this.cracker.getCurrentPassphrase());
+            return;
         }
         regex = "(?i)\\QCAP\\E";
         m = Pattern.compile(regex).matcher(msg);
         if (m.find()) {
             //receber arquivo
             this.receiveCapFile();
+            return;
         }
-
+        regex = "(?i)\\QSTART_CRACK\\E\\s(?<charset>[\\w]+)\\s(?<min>[\\d]+)\\s(?<max>[\\d]+)\\s(?<part>[\\d]+)\\s(?<totalClients>[\\d]+)";
+        m = Pattern.compile(regex).matcher(msg);
+        if (m.find()) {
+            //gera lista de combinações
+            cg.setCharacterSet( m.group("charset"));
+            cg.setMinCharacter(Integer.parseInt(m.group("min")));
+            cg.setMaxCharacter(Integer.parseInt(m.group("max")));
+            cg.setActualPart(Integer.parseInt(m.group("part")));
+            cg.setTotalParts(Integer.parseInt(m.group("totalClients")));
+            cg.setPath("combinations.txt");
+            cg.startProceeds();
+            //cg.generate("combinations.txt");
+            //inicia o wpacracker
+            this.cracker.setCapPath("received.cap");
+            this.cracker.setCombinationPath("combinations.txt");
+            this.cracker.startCrack();
+            return;
+        }
     }
 
     private void receiveCapFile() throws IOException {

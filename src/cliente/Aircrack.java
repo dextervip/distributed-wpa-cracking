@@ -1,6 +1,7 @@
 package cliente;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -86,7 +87,9 @@ public class Aircrack extends WPACracker implements Runnable {
 
     @Override
     public void startCrack() throws Exception {
-        this.pb = new ProcessBuilder("aircrack-ng", this.capPath, "-w", this.combinationPath);
+        File f = new File(this.combinationPath);
+        this.pb = new ProcessBuilder("aircrack-ng", this.capPath, "-w", f.getAbsolutePath());
+        LOG.log(Level.INFO, this.pb.command().toString());
         this.process = this.pb.start();
         this.is = this.process.getInputStream();
         this.thread.start();

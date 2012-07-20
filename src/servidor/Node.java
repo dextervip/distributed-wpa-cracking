@@ -43,12 +43,12 @@ public class Node extends Thread {
         return this.inputStream.readUTF();
     }
 
-    public void startCrack(String charset, int min, int max, int part, int totalClients, String cap) {
+    public void startCrack(String charset, int min, int max, int part, int totalClients, String capFilePath) {
 
         try {
             this.send("CAP");
             
-            File file = new File(cap);
+            File file = new File(capFilePath);
             FileInputStream fin = new FileInputStream(file);
             byte sendData[] = new byte[(int) file.length()];
             fin.read(sendData);
@@ -56,7 +56,7 @@ public class Node extends Thread {
             this.outputStream.write(sendData, 0, sendData.length);
             this.outputStream.flush();
             
-            
+            this.send("START_CRACK "+charset+" "+min+" "+max+" "+part+" "+totalClients);
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, "Error while sending cap file.", ex);
         }
