@@ -118,7 +118,7 @@ public class IntegrationTest {
             Logger.getLogger(IntegrationTest.class.getName()).log(Level.INFO, "Detelting {0}", f.getAbsolutePath());
             f.deleteOnExit();
         }
-        f = new File("combinations.txt");
+        f = new File("combinations1.txt");
         if (f.exists()) {
             Logger.getLogger(IntegrationTest.class.getName()).log(Level.INFO, "Detelting {0}", f.getAbsolutePath());
             f.deleteOnExit();
