@@ -18,7 +18,10 @@ public class Server extends Thread {
     private int max;
     private int updateFrequency = 5;
     private static final Logger LOG = Logger.getLogger(Server.class.getName());
-
+    /**
+     * Start server and listen for client's connection
+     * @throws IOException 
+     */
     public void listen() throws IOException {
         this.socket = new ServerSocket(this.port);
         while (true) {
@@ -29,11 +32,18 @@ public class Server extends Thread {
             node.start();
         }
     }
-
+    /**
+     * Add an node to list
+     * @param node 
+     */
     public void addNode(Node node) {
         this.nodes.add(node);
     }
-
+    /**
+     * Send a message to all nodes
+     * @param msg
+     * @throws IOException 
+     */
     public void sendAll(String msg) throws IOException {
         ListIterator<Node> nodeList = nodes.listIterator();
         while (nodeList.hasNext()) {
@@ -41,12 +51,17 @@ public class Server extends Thread {
             node.send(msg);
         }
     }
-
+    /*
+     * Send a message to a node
+     */
     public void sendTo(Node n, String msg) throws IOException {
         Node node = this.nodes.get(this.nodes.indexOf(n));
         node.send(msg);
     }
-
+    /**
+     * Get the number of active nodes
+     * @return 
+     */
     public int getNumberOfNodes() {
         return this.nodes.size();
     }
@@ -54,17 +69,27 @@ public class Server extends Thread {
     public ArrayList<Node> getNodes() {
         return this.nodes;
     }
-
+    /**
+     * Load cap path
+     * @param path 
+     */
     public void loadCap(String path) {
         this.capPath = path;
     }
-
+    /**
+     * Configure the brute force dictionary
+     * @param charset
+     * @param min
+     * @param max 
+     */
     public void configureDictionary(String charset, int min, int max) {
         this.charset = charset;
         this.min = min;
         this.max = max;
     }
-
+    /*
+     * Start crack process in all nodes
+     */
     public void startCrack() throws Exception {
         LOG.log(Level.INFO, "Starting crack...");
         if (this.capPath == null || this.capPath.isEmpty()) {
@@ -87,20 +112,31 @@ public class Server extends Thread {
         }
 
     }
-
+    /**
+     * Stop crack process in all nodes
+     */
     public void stopCrack() {
         LOG.log(Level.INFO, "Stopping crack...");
 
     }
-
+    /**
+     * Get statistics about cracking process from all nodes
+     * @return 
+     */
     public String[] getStatistics() {
         return null;
     }
-
+    /**
+     * Set update UI frequency 
+     * @param updateFrequency 
+     */
     public void setUpdateFrequency(int updateFrequency) {
         this.updateFrequency = updateFrequency;
     }
-
+    /**
+     * Get update UI frequency
+     * @return int seconds frequency
+     */
     public int getUpdateFrequency() {
         return updateFrequency;
     }

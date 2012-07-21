@@ -2,6 +2,7 @@ package cliente;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.ini4j.Ini;
 
 public class Client {
 
@@ -23,14 +25,31 @@ public class Client {
     private DataOutputStream outputStream;
     private DataInputStream inputStream;
     private Matcher m;
-    
     private static final Logger LOG = Logger.getLogger(Client.class.getName());
 
     public Client() {
         this.cracker = new Aircrack();
         this.cg = new CombinationGenerator();
+        this.loadConfing();
+    }
+    /**
+     * Load the configuration from ini file
+     */
+    private void loadConfing() {
+        Ini ini = new Ini();
+        try {
+            ini.load(new File("config.ini"));
+            Ini.Section config = ini.get("config");
+            this.serverAddress = config.get("host");
+            this.port = Integer.parseInt(config.get("port"));
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Error while loading config", ex);
+        } 
     }
 
+    /**
+     * Connect to server
+     */
     public void connect() {
         try {
             socket = new Socket(serverAddress, port);
@@ -63,6 +82,11 @@ public class Client {
 
     }
 
+    /**
+     * Send a message to server
+     *
+     * @param msg
+     */
     public void send(String msg) {
         try {
             this.outputStream.writeUTF(msg);
@@ -77,6 +101,11 @@ public class Client {
 
     }
 
+    /**
+     * Read a message from server
+     *
+     * @return string message
+     */
     public String receive() {
         try {
             String msg = inputStream.readUTF();
@@ -98,13 +127,19 @@ public class Client {
         return this.cracker;
     }
 
+    /**
+     * Process a message incoming from server
+     *
+     * @param msg
+     * @throws Exception
+     */
     public void process(String msg) throws Exception {
         LOG.log(Level.INFO, "Mensagem recebida: {0}", msg);
         String regex = "(?i)\\QSTATUS\\E";
         Matcher m = Pattern.compile(regex).matcher(msg);
         if (m.find()) {
             this.send("STATUS " + this.cracker.getStatus());
-            return;
+            //return;
         }
 
         regex = "(?i)\\QSTATS\\E";
@@ -112,35 +147,46 @@ public class Client {
         if (m.find()) {
             this.send("STATS " + this.cracker.getCurrentTime() + " " + this.cracker.getCurrentKeysPerSecond()
                     + " " + this.cracker.getCurrentPassphrase());
-            return;
+            //return;
+        }
+        regex = "(?i)\\QGET_KEY_FOUND\\E";
+        m = Pattern.compile(regex).matcher(msg);
+        if (m.find()) {
+            this.send("KEY " + this.cracker.getKeyFound());
+            //return;
         }
         regex = "(?i)\\QCAP\\E";
         m = Pattern.compile(regex).matcher(msg);
         if (m.find()) {
             //receber arquivo
             this.receiveCapFile();
-            return;
+            //return;
         }
         regex = "(?i)\\QSTART_CRACK\\E\\s(?<charset>[\\w]+)\\s(?<min>[\\d]+)\\s(?<max>[\\d]+)\\s(?<part>[\\d]+)\\s(?<totalClients>[\\d]+)";
         m = Pattern.compile(regex).matcher(msg);
         if (m.find()) {
             //gera lista de combinações
-            cg.setCharacterSet( m.group("charset"));
+            cg.setCharacterSet(m.group("charset"));
             cg.setMinCharacter(Integer.parseInt(m.group("min")));
             cg.setMaxCharacter(Integer.parseInt(m.group("max")));
             cg.setActualPart(Integer.parseInt(m.group("part")));
             cg.setTotalParts(Integer.parseInt(m.group("totalClients")));
-            cg.setPath("combinations.txt");
+            cg.setPath("combinations" + m.group("part") + ".txt");
             cg.startProceeds();
             //cg.generate("combinations.txt");
             //inicia o wpacracker
             this.cracker.setCapPath("received.cap");
-            this.cracker.setCombinationPath("combinations.txt");
+            this.cracker.setCombinationPath("combinations" + m.group("part") + ".txt");
             this.cracker.startCrack();
-            return;
+            //return;
         }
     }
 
+    /**
+     * Receive a cap file from server
+     *
+     * @throws IOException
+     */
     private void receiveCapFile() throws IOException {
         try {
             //recebendo arquivo pelo stream
@@ -158,7 +204,7 @@ public class Client {
             this.send("CAP_OK");
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, "Error while transfering file", ex);
-            this.send("CAP_TRANSFERENCE_ERROR "+ex.getMessage());
+            this.send("CAP_TRANSFERENCE_ERROR " + ex.getMessage());
         }
     }
 }

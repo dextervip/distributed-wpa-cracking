@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -33,16 +32,31 @@ public class Node extends Thread {
         this.inputStream = new DataInputStream(this.socket.getInputStream());
         this.ip = this.socket.getInetAddress().getHostAddress();
     }
-
+    /**
+     * Send a message to node
+     * @param msg
+     * @throws IOException 
+     */
     public void send(String msg) throws IOException {
         this.outputStream.writeUTF(msg);
         this.outputStream.flush();
     }
-
+    /*
+     * Read a message from node
+     */
     private String receive() throws IOException {
         return this.inputStream.readUTF();
     }
 
+    /**
+     * Start node cracking
+     * @param charset
+     * @param min
+     * @param max
+     * @param part
+     * @param totalClients
+     * @param capFilePath 
+     */
     public void startCrack(String charset, int min, int max, int part, int totalClients, String capFilePath) {
 
         try {
@@ -61,7 +75,9 @@ public class Node extends Thread {
             LOG.log(Level.SEVERE, "Error while sending cap file.", ex);
         }
     }
-
+    /**
+     * Stop node cracking
+     */
     public void stopCrack() {
     }
 
@@ -88,12 +104,32 @@ public class Node extends Thread {
     public String getKeyFound() {
         return this.keyFound;
     }
-
-    public void updateStatistics() throws IOException {
+    /**
+     * Request node to update status
+     * @throws IOException 
+     */
+    public void updateStatus() throws IOException {
         this.send("STATUS");
+    }
+    /**
+     * Request node to update statistics
+     * @throws IOException 
+     */
+    public void updateStatistics() throws IOException {
         this.send("STATS");
     }
-
+    /**
+     * Request node to update key found
+     * @throws IOException 
+     */
+    public void updateKeyFound() throws IOException {
+        this.send("GET_KEY_FOUND");
+    }
+    
+    /**
+     * Process all incoming stream from the node
+     * @throws IOException 
+     */
     public void process() throws IOException {
         String msg = this.receive();
         LOG.log(Level.INFO, "Mensagem recebida: {0}", msg);
@@ -117,9 +153,17 @@ public class Node extends Thread {
             this.status = "WAITING";
             return;
         }
+        regex = "(?i)\\QKEY\\E\\s(?<key>[\\w]+)";
+        m = Pattern.compile(regex).matcher(msg);
+        if (m.find()) {
+            this.keyFound = m.group("key");
+            return;
+        }
 
     }
-
+    /**
+     * Finalize node thread
+     */
     public void finalizeThread() {
         this.finalized = true;
     }

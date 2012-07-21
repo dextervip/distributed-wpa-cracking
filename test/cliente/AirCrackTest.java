@@ -37,20 +37,36 @@ public class AirCrackTest {
     }
 
     /**
-     * Test of setCapPath method, of class Aircrack.
+     * Test cracking with non-existing cap file path
      */
     @Test
-    public void testAircrack() {
+    public void testAircrackWrongPath() {
         try {
             Aircrack c = new Aircrack();
             c.setCapPath("Private-02.cap");
             c.setCombinationPath("wordlist_pt_br_final.txt");
             c.startCrack();
-            String status = c.getStatus();
-            assertEquals(status, "ERROR");
-            
-        } catch (Exception e) {
-            e.printStackTrace();
+            assertEquals(c.getStatus(), "ERROR");
+        } catch (Exception ex) {
+            fail(ex.getMessage());
         }
+    }
+    /**
+     * Test a successful cracking
+     */
+    @Test
+    public void testAircrackKeyFound() {
+        try {
+            Aircrack c = new Aircrack();
+            c.setCapPath(".\\test\\Private-01.cap");
+            c.setCombinationPath(".\\test\\combinations1.txt");
+            c.startCrack();
+            Thread.sleep(2000);
+            assertEquals("KEY_FOUND", c.getStatus());
+            assertEquals("81579997", c.getKeyFound());
+        } catch (Exception ex) {
+            fail(ex.getMessage());
+        }
+        
     }
 }

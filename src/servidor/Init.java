@@ -17,7 +17,9 @@ public class Init {
 
     public Init() {
     }
-
+    /**
+     * Init GUI mode interface
+     */
     public void initGUIMode() {
         LOG.log(Level.INFO, "Initializing GUIMode");
         this.enableNimbusTheme();
@@ -51,12 +53,17 @@ public class Init {
         }
         //</editor-fold>
     }
-
+    /**
+     * Init text mode interface
+     */
     public void initTextMode() {
         LOG.log(Level.INFO, "Initializing TextMode");
         TextMode text = new TextMode();
     }
-
+    /**
+     * Verify if user has chosen GUI or Text mode interface, otherwise test GUI support
+     * @param args 
+     */
     public void initServer(String args[]) {
         LOG.log(Level.INFO, "Initializing server");
         if (args.length == 0) {

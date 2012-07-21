@@ -11,9 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
  * @author Rafael
- *
  */
 public class Aircrack extends WPACracker implements Runnable {
 
@@ -29,62 +27,69 @@ public class Aircrack extends WPACracker implements Runnable {
         this.thread = new Thread(this);
         this.status = "INIT";
     }
-
+    /**
+     * Process output screen from aircrack process
+     * @throws IOException 
+     */
     public void processInputSream() throws IOException {
         InputStreamReader isr = new InputStreamReader(this.is);
         BufferedReader br = new BufferedReader(isr);
         String line;
         while ((line = br.readLine()) != null) {
-            LOG.log(Level.INFO, line);
-            this.processMessage(line);
+            this.processText(line);
         }
     }
-
-    private void processMessage(String line) {
+    /**
+     * Process text from aircrak output screen
+     * @param text 
+     */
+    private void processText(String text) {
         String regex = "(?i)\\QReading packets, please wait...\\E";
-        Matcher m = Pattern.compile(regex).matcher(line);
+        Matcher m = Pattern.compile(regex).matcher(text);
         if (m.find()) {
             this.status = "PROCESSING";
         }
 
         regex = "(?i)keys tested\\s\\Q(\\E(?<keys>[\\w\\s\\Q/.\\E]+)\\Q)\\E";
-        m = Pattern.compile(regex).matcher(line);
+        m = Pattern.compile(regex).matcher(text);
         if (m.find()) {
             this.currentKeysPerSecond = m.group("keys");
         }
 
         regex = "(?i)\\Q[\\E\\d{2}:\\d{2}:\\d{2}\\Q]\\E";
-        m = Pattern.compile(regex).matcher(line);
+        m = Pattern.compile(regex).matcher(text);
         if (m.find()) {
             this.currentTime = m.group();
         }
 
         regex = "(?i)Current\\spassphrase:\\s(?<passphrase>[\\w]+)";
-        m = Pattern.compile(regex).matcher(line);
+        m = Pattern.compile(regex).matcher(text);
         if (m.find()) {
             this.currentPassphrase = m.group("passphrase");
         }
 
-        regex = "(?i)KEY FOUND!\\s\\Q[\\E\\s([\\w]+)\\s\\Q]\\E";
-        m = Pattern.compile(regex).matcher(line);
+        regex = "(?i)KEY FOUND!\\s\\Q[\\E\\s(?<key>[\\w]+)\\s\\Q]\\E";
+        m = Pattern.compile(regex).matcher(text);
         if (m.find()) {
-            this.keyFound = m.group();
+            this.keyFound = m.group("key");
             this.status = "KEY_FOUND";
         }
 
         regex = "(?i)\\bPassphrase not in dictionary\\b";
-        m = Pattern.compile(regex).matcher(line);
+        m = Pattern.compile(regex).matcher(text);
         if (m.find()) {
             this.status = "KEY_NOT_FOUND";
         }
 
         regex = "(?i)\\bNo networks found\\Q,\\E exiting\\b";
-        m = Pattern.compile(regex).matcher(line);
+        m = Pattern.compile(regex).matcher(text);
         if (m.find()) {
             this.status = "ERROR";
         }
     }
-
+    /*
+     * Start aircrak process
+     */
     @Override
     public void startCrack() throws Exception {
         File f = new File(this.combinationPath);
@@ -95,7 +100,9 @@ public class Aircrack extends WPACracker implements Runnable {
         this.thread.start();
         this.process.waitFor();
     }
-
+    /**
+     * Stop aircrak process
+     */
     @Override
     public void stopCrack() {
         this.thread.interrupt();

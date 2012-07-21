@@ -78,7 +78,13 @@
 	</target>
 	
 	<target name="compile" depends="init">
-		<javac srcdir="src" destdir="build/classes" />
+		<javac srcdir="src" destdir="build/classes" includeantruntime="true">
+		<classpath>  
+                <fileset dir="src/library">  
+                    <include name="*.jar" />  
+                </fileset>  
+            </classpath>  
+		</javac>
 	</target>
 
 	<target name="compress" depends="compile">
@@ -89,7 +95,7 @@
 			</manifest>
 			<fileset dir="src">  
 				<include name="**/*.class" /> 
-				<include name="**/*.jar" />  
+				<include name="library/*.jar" />  
 			</fileset>  
 		</jar>
 		<jar destfile="dist/distributed-wpa-cracker-server.jar" basedir="build/classes">
@@ -99,7 +105,7 @@
 			</manifest>
 			<fileset dir="src">  
 				<include name="**/*.class" /> 
-				<include name="**/*.jar" />  
+				<include name="library/*.jar" />  
 			</fileset>  
 		</jar>
 	</target>
@@ -124,12 +130,16 @@
     </pathconvert>  
 	
 
-	<target name="clean">
+	<target name="clean1">
 		<delete dir="build" />
 		<delete dir="dist" />
 	</target>
 	
-	<target name="gerar-jars" depends="clean,compress"></target>
+	<target name="copy.config.file">
+		<copy file="config.ini" tofile="dist/config.ini" overwrite="true"/>
+	</target>
+	
+	<target name="gerar-jars" depends="clean1,compress,copy.config.file"></target>
 	
 	
 	
