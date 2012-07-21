@@ -62,7 +62,7 @@ public class IntegrationTest {
             Node node = s.getNodes().get(0);
             assertEquals("WAITING", node.getStatus());
             while (node.getStatus().equalsIgnoreCase("KEY_FOUND") == false) {
-                Thread.sleep(1000);
+                Thread.sleep(3000);
                 node.updateStatus();
             }
             node.updateKeyFound();
